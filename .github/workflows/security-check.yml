@@ -1,0 +1,26 @@
+name: Security Check
+
+on: push  # Run the workflow on every push
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3  # Fetch the code
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install Security Scanners
+        run: |
+          pip install bandit safety
+
+      - name: Run Bandit (Code Security Scan)
+        run: bandit -r scripts/
+
+      - name: Run Safety (Dependency Security Scan)
+        run: safety check
